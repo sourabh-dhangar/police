@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../utils/api';
 import QRCode from "react-qr-code";
 import { useAuth } from '../context/AuthContext';
 
@@ -25,7 +25,7 @@ export default function Dashboard() {
             if (!token) return navigate('/login');
 
             const config = { headers: { Authorization: `Bearer ${token}` } };
-            const { data } = await axios.get('http://localhost:5000/api/forms', config);
+            const { data } = await api.get('/forms', config);
             setForms(data);
             setLoading(false);
         } catch (error) {
@@ -38,7 +38,7 @@ export default function Dashboard() {
         if (!window.confirm("Are you sure?")) return;
         try {
             const config = { headers: { Authorization: `Bearer ${token}` } };
-            await axios.delete(`http://localhost:5000/api/forms/${id}`, config);
+            await api.delete(`/forms/${id}`, config);
             fetchForms();
         } catch (error) {
             alert("Error deleting form");
@@ -49,7 +49,7 @@ export default function Dashboard() {
         try {
             const config = { headers: { Authorization: `Bearer ${token}` } };
             const updatedForm = { ...form, isActive: !form.isActive };
-            await axios.put(`http://localhost:5000/api/forms/${form._id}`, updatedForm, config);
+            await api.put(`/forms/${form._id}`, updatedForm, config);
             fetchForms();
         } catch (error) {
             console.error("Error updating form status", error);
@@ -67,7 +67,7 @@ export default function Dashboard() {
                 currentForms.map(f => f._id === form._id ? { ...f, isFavorite: newStatus } : f)
             );
 
-            await axios.put(`http://localhost:5000/api/forms/${form._id}`, { isFavorite: newStatus }, config);
+            await api.put(`/forms/${form._id}`, { isFavorite: newStatus }, config);
             // No need to fetchForms() immediately if optimistic update works, 
             // but fetching ensures consistency. We can debounce it or leave it.
             // fetchForms(); 

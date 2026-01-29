@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from '../utils/api';
 import { useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import FormRenderer from "../components/FormRenderer";
@@ -22,7 +22,7 @@ export default function PublicForm() {
     }, [user]);
 
     useEffect(() => {
-        axios.get(`http://172.20.10.2:5000/api/public/forms/${slug}`)
+        api.get(`/public/forms/${slug}`)
             .then(res => {
                 setForm(res.data);
                 setLoading(false);
@@ -79,7 +79,7 @@ export default function PublicForm() {
 
             formData.append('answers', JSON.stringify(answersPayload));
 
-            await axios.post(`http://172.20.10.2:5000/api/public/forms/${slug}/submit`, formData);
+            await api.post(`/public/forms/${slug}/submit`, formData);
 
             if (form.limitOneResponse) {
                 localStorage.setItem(`submitted_${form._id}`, 'true');

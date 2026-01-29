@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import logo from '../assets/policelogo.png';
@@ -57,7 +57,7 @@ export default function Login() {
 
         try {
             const [response] = await Promise.all([
-                axios.post('http://localhost:5000/api/auth/login', { email, password }),
+                api.post('/auth/login', { email, password }),
                 minLoadTime
             ]);
 
@@ -79,7 +79,7 @@ export default function Login() {
         setIsLoading(true);
 
         try {
-            await axios.post('http://localhost:5000/api/auth/reset-password', {
+            await api.post('/auth/reset-password', {
                 email,
                 newPassword,
                 secretKey: recoveryCode

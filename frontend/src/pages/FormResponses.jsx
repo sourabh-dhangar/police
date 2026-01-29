@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api, { API_URL } from '../utils/api';
 import * as XLSX from 'xlsx';
 
 export default function FormResponses() {
@@ -20,8 +20,8 @@ export default function FormResponses() {
             const config = { headers: { Authorization: `Bearer ${token}` } };
 
             const [formRes, responsesRes] = await Promise.all([
-                axios.get(`http://localhost:5000/api/forms/${id}`, config),
-                axios.get(`http://localhost:5000/api/forms/${id}/responses`, config)
+                api.get(`/forms/${id}`, config),
+                api.get(`/forms/${id}/responses`, config)
             ]);
 
             setForm(formRes.data);
@@ -139,7 +139,7 @@ export default function FormResponses() {
                                                                 </div>
                                                             ) : q.type === 'file' && answer ? (
                                                                 <a
-                                                                    href={`http://172.20.10.2:5000${answer}`}
+                                                                    href={`${API_URL.replace('/api', '')}${answer}`}
                                                                     target="_blank"
                                                                     rel="noopener noreferrer"
                                                                     className="text-blue-600 hover:text-blue-800 underline"

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../utils/api';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import {
@@ -37,8 +37,8 @@ export default function FormReport() {
             const config = { headers: { Authorization: `Bearer ${token}` } };
 
             const [formRes, responsesRes] = await Promise.all([
-                axios.get(`http://localhost:5000/api/forms/${id}`, config),
-                axios.get(`http://localhost:5000/api/forms/${id}/responses`, config)
+                api.get(`/forms/${id}`, config),
+                api.get(`/forms/${id}/responses`, config)
             ]);
 
             setForm(formRes.data);

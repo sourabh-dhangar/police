@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../utils/api';
 import FormBuilder from '../components/FormBuilder';
 
 export default function FormEditor() {
@@ -34,7 +34,7 @@ export default function FormEditor() {
         try {
             const token = localStorage.getItem('token');
             const config = { headers: { Authorization: `Bearer ${token}` } };
-            const { data } = await axios.get(`http://localhost:5000/api/forms/${id}`, config);
+            const { data } = await api.get(`/forms/${id}`, config);
             setForm(data);
             setLoading(false);
         } catch (error) {
@@ -57,7 +57,7 @@ export default function FormEditor() {
             }
 
             if (isNew) {
-                const { data } = await axios.post('http://localhost:5000/api/forms', payload, config);
+                const { data } = await api.post('/forms', payload, config);
                 if (publish) {
                     alert("Form Published!");
                     navigate('/admin/dashboard');
@@ -65,7 +65,7 @@ export default function FormEditor() {
                     navigate(`/admin/forms/${data._id}/edit`);
                 }
             } else {
-                await axios.put(`http://localhost:5000/api/forms/${id}`, payload, config);
+                await api.put(`/forms/${id}`, payload, config);
                 if (publish) {
                     setForm(f => ({ ...f, isPublished: true }));
                     alert("Form Published!");
